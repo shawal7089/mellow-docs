@@ -18,11 +18,13 @@ jobs:
         run: yes | "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" --licenses > /dev/null || true
       - name: Unpack and build
         run: |
-          unzip -q Mellow-Docs-project.zip
-          cd mellow-docs
+          ls -la
+          mkdir proj
+          unzip -q "$(ls *.zip | head -1)" -d proj
+          cd proj/mellow-docs
           chmod +x gradlew
           ./gradlew --no-daemon assembleRelease
-          cp app/build/outputs/apk/release/app-release.apk ../Mellow-Docs.apk
+          cp app/build/outputs/apk/release/app-release.apk "$GITHUB_WORKSPACE/Mellow-Docs.apk"
       - uses: softprops/action-gh-release@v2
         with:
           tag_name: docs-${{ github.run_number }}
